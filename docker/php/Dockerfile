@@ -8,9 +8,15 @@ RUN apt update \
     && docker-php-ext-configure zip \
     && docker-php-ext-install zip
 
+ENV XDEBUG_VERSION 3.1.2
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
 WORKDIR /var/www/personal
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 RUN git config --global user.email "gremaudmatthieu@gmail.com" \
     && git config --global user.name "Matthieu"
+
+COPY ./xdebug.ini $PHP_INI_DIR/conf.d/xdebug.ini
